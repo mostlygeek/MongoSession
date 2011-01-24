@@ -223,4 +223,14 @@ class MongoSessionHandler
             array('expire' => array('$lt' => time()))
         );
     }
+
+	function __destruct(){
+        // As of PHP 5.0.5 the write and close handlers are called after
+        // object destruction and therefore cannot use objects or throw exceptions.
+        // The object destructors can however use sessions.
+        //
+        // It is possible to call session_write_close() from the destructor
+        // to solve this chicken and egg problem.
+		session_write_close();
+	}
 }
