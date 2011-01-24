@@ -184,12 +184,11 @@ class MongoSessionHandler
     public function write($id, $data)
     {
         $doc = array(
-            '_id'       => $id,
             'lock'      => 0,
             'd'         => $data,
             'expire'    => time() + intval(ini_get('session.gc_maxlifetime'))
         );
-        $options = array('safe' => true);
+        $options = array('safe' => true,'upsert'=>true);
 
         $result = $this->_mongo->update(array('_id' => $id), $doc, $options);
 
